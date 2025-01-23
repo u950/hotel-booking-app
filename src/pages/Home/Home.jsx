@@ -7,24 +7,30 @@ import { priceRanges,cityValues, ratingValues } from './FilterValues';
 
 const Home = () => {
   // useStates for 3 filtering categories
-  const [selectedPriceRanges, setSelectedPriceRanges] = useState(['below1000']);
-  const [selectedCity, setSelectedCity] = useState('Delhi');
-  const [selectedRating, setSelectedRating] = useState(['0-1']);
+  const location = useLocation();
+  const {place} = location.state || {};
+
+  const [selectedPriceRanges, setSelectedPriceRanges] = useState(["1000-2000"]);
+  const [selectedCity, setSelectedCity] = useState(place || 'Delhi');
+  const [selectedRating, setSelectedRating] = useState([]);
 
   const [hotels, setHotels] = useState([]);
   const [filteredHotels, setFilteredHotels] = useState([]);
   const [pages, setPages] = useState(1);
-  const [pageSize, setPageSize] = useState(12);
+  const [pageSize, setPageSize] = useState(36);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const location = useLocation();
-  const {place} = location.state || {};
+  
+
   const [searchTerm, setSearchTerm] = useState(place);
 
+
   useEffect(() => {
-    setSearchTerm(place);
-  },[place])
+    // setSearchTerm(selectedCity);
+    // // setPageSize(36);
+    fetchHotelData();
+  },[selectedCity])
 
   const fetchHotelData = async () => {
     setLoading(true);
@@ -42,11 +48,12 @@ const Home = () => {
 
   const filterHotels = () => {
     const selectedRangesSet = new Set(selectedPriceRanges);
-
-    // selected rating filtering 
     const selectedRatingSet = new Set(selectedRating);
 
     const filtered = hotels.filter((hotel) => {
+      // Check if the hotel is in the selected city
+      const cityMatch = hotel.city === selectedCity;
+
       // Check if at least one room matches the selected price ranges
       const priceMatch = hotel.rooms.some((room) => {
         return (
@@ -58,23 +65,24 @@ const Home = () => {
         );        
       });
 
-        const ratingMatch = selectedRatingSet.has("0-1") && hotel.rating >= 0 && hotel.rating <= 1 ||
-          selectedRatingSet.has("1-2") && hotel.rating >= 1 && hotel.rating <= 2 ||
-          selectedRatingSet.has("2-3") && hotel.rating >= 2 && hotel.rating <= 3 ||
-          selectedRatingSet.has("3-4") && hotel.rating >= 3 && hotel.rating <= 4 ||
-          selectedRatingSet.has("4-5") && hotel.rating >= 4 && hotel.rating <= 5;
+      const ratingMatch = (selectedRatingSet.has("0-1") && hotel.rating >= 0 && hotel.rating <= 1) ||
+        (selectedRatingSet.has("1-2") && hotel.rating >= 1 && hotel.rating <= 2) ||
+        (selectedRatingSet.has("2-3") && hotel.rating >= 2 && hotel.rating <= 3) ||
+        (selectedRatingSet.has("3-4") && hotel.rating >= 3 && hotel.rating <= 4) ||
+        (selectedRatingSet.has("4-5") && hotel.rating >= 4 && hotel.rating <= 5);
 
-      
-
-      // Check if the hotel is in the selected city
-      const cityMatch = selectedCity === '' || hotel.city === selectedCity;
-
-      return priceMatch && cityMatch && ratingMatch; // add filtered rating
+      return cityMatch && (ratingMatch || priceMatch);
     });
 
     setFilteredHotels(filtered);
-    // console.log(filtered);
   };
+
+  useEffect(()=>{
+    if(place){
+      setSelectedCity(place);
+      console.log(place);
+    }
+  },[place])
 
   useEffect(() => {
     fetchHotelData();
@@ -127,26 +135,32 @@ const Home = () => {
   const handlePriceRangeChange = (event) => {
     const { value } = event.target;
     setSelectedPriceRanges([value]); // Set the selected range to the clicked one
-    setPages(1)
+    setSelectedRating([]); // Clear the selected rating when price range is selected
+    setPages(1);
   };
 
   const handleCityChange = (event) => {
     const { value } = event.target;
     setSelectedCity(value); // Set the selected city directly
+    window.scrollBy({
+      top: -230,
+      left:0,
+      behavior:'smooth'
+    })
   };
 
   // handling rating change
-  const handleRatingChange =(event)=>{
+  const handleRatingChange = (event) => {
     const { value } = event.target;
-    setSelectedRating((prev) =>{
-      if(prev.includes(value)){
-        return prev.filter((rating) => rating !== value);
-      }
-      // return [...prev, value];
-      return [value];
+    setSelectedRating([value]); // Set the selected rating to the clicked one
+    setSelectedPriceRanges([]); // Clear the selected price range when rating is selected
+    setPages(1);
+    window.scrollBy({
+      top:-400,
+      left:0,
+      behavior:'smooth'
     })
-    // Set the selected rating directly
-  }
+  };
 
   return (
     <div>

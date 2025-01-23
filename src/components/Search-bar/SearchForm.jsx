@@ -13,6 +13,8 @@ const SearchForm = () => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
 
+  const [clickSearchButton,setClickSearchButton] = useState(false);
+
   const navigate = useNavigate();
 
   // function to fetch suggestion
@@ -51,14 +53,20 @@ const SearchForm = () => {
       alert("Check-Out date should be later than Check-In date");
       return;
     }
-    // console.log({ place, checkIn, checkOut, guest });
+    // Navigate to Home with the current city as place
     navigate(`/`, { state: { place } });
+    window.scrollBy({
+      top : 600, // distance to scroll
+      left : 0,
+      behavior: 'smooth',
+    })
   };
 
   const handleSuggestionClick = (suggestion) => {
     
-    setPlace(suggestion.name); // Update input field with the selected suggestion
+    setPlace(suggestion.city); // Update input field with the selected suggestion
     setShowSuggestions(false); // Hide suggestions after selection
+    console.log('clicked on city suggestion')
   };
 
   return (
@@ -74,7 +82,7 @@ const SearchForm = () => {
               setPlace(e.target.value); // Show suggestions on input change
             }}
             onFocus={() => setShowSuggestions(true)} // Show suggestions on focus
-            onBlur={() => setTimeout(() => setShowSuggestions(false), 200)} // Delay to prevent blur from hiding suggestions too quickly
+            onBlur={() => setTimeout(() => setShowSuggestions(false), 1000)} // Delay to prevent blur from hiding suggestions too quickly
           />
           {showSuggestions && suggestions.length > 0 && (
             <ul className='suggestions-dropdown'>
@@ -129,7 +137,12 @@ const SearchForm = () => {
           />
         </div>
 
-        <button type="submit" className="search-button">Search</button>
+        <button type="submit" className="search-button"
+          onClick={()=>{
+            setClickSearchButton(true)
+            setTimeout(()=>setClickSearchButton(false), 500)}}
+        >Search</button>
+        {clickSearchButton && <p style={{color: 'blue'}}>searching...</p>}
       </form>
     </div>
   );
