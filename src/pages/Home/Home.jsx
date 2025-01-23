@@ -96,12 +96,12 @@ const Home = () => {
 
   const filterStyle = {
     display: 'flex',
-    flexDirection: 'column',
-    position: 'sticky',
+    // flexDirection: 'column',
+    // position: 'sticky',
     top: '80px',
     width: '25%',
     height: 'fit-content',
-    textAlign: 'left',
+    textAlign: 'center',
     marginLeft: '10px',
     padding: '15px',
     backgroundColor: 'white',
@@ -125,10 +125,10 @@ const Home = () => {
       <br />
       <div style={grids}>
         <div>
-          <h3 style={filterStyle} className='filters'>Filter</h3>
+          <h3 style={filterStyle} className='filters'>Filters</h3>
 
           <h4>Price Range</h4>
-          <label>
+          <label style={{display:'flex', alignItems: 'center'}}>
             <input 
               type="checkbox" 
               value="below1000"
@@ -137,7 +137,7 @@ const Home = () => {
             />
             <p>Below 1000 Rs</p>
           </label>
-          <label>
+          <label style={{display:'flex', alignItems: 'center'}}>
             <input 
               type="checkbox" 
               value="1000-2000"
@@ -146,7 +146,7 @@ const Home = () => {
             />
             <p>1000 - 2000 Rs</p>
           </label>
-          <label>
+          <label style={{display:'flex', alignItems: 'center'}}>
             <input 
               type="checkbox" 
               value="2000-4000"
@@ -155,7 +155,7 @@ const Home = () => {
             />
             <p>2000 - 4000 Rs</p>
           </label>
-          <label>
+          <label style={{display:'flex', alignItems: 'center'}}>
             <input 
               type="checkbox" 
               value="4000-6000"
@@ -163,8 +163,8 @@ const Home = () => {
               onChange={handlePriceRangeChange}
             />
             <p>4000 - 6000 Rs</p>
-          </label>
-          <label>
+          </label >
+          <label style={{display:'flex', alignItems: 'center'}}>
             <input 
               type="checkbox" 
               value="6000-above"
@@ -172,10 +172,10 @@ const Home = () => {
               onChange={handlePriceRangeChange}
             />
             <p>6000 and Above</p>
-          </label>
+          </label >
 
           <h4>City</h4>
-          <label>
+          <label style={{display:'flex', alignItems: 'center'}}>
             <input 
               type="checkbox" 
               value="Delhi" 
@@ -183,8 +183,8 @@ const Home = () => {
               onChange={handleCityChange} 
             />
             <p>Delhi</p>
-          </label>
-          <label>
+          </label >
+          <label style={{display:'flex', alignItems: 'center'}}>
             <input 
               type="checkbox" 
               value="Hyderabad" 
@@ -193,7 +193,7 @@ const Home = () => {
             />
             <p>Hyderabad</p>
           </label>
-          <label>
+          <label style={{display:'flex', alignItems: 'center'}}>
             <input 
               type="checkbox" 
               value="Goa" 
@@ -201,8 +201,8 @@ const Home = () => {
               onChange={handleCityChange} 
             />
             <p>Goa</p>
-          </label>
-          <label>
+          </label >
+          <label style={{display:'flex', alignItems: 'center'}}>
             <input 
               type="checkbox" 
               value="Mumbai" 
@@ -246,14 +246,14 @@ const Home = () => {
           </div>
 
           <div>
-            <label>
+            <label style={{display:'flex', alignItems: 'center'}}>
               Page Size:
               <select value={pageSize} onChange={(e) => setPageSize(Number(e.target.value))}>
                 <option value={12}>12</option>
                 <option value={24}>24</option>
                 <option value={36}>36</option>
               </select>
-            </label>
+            </label >
           </div>
         </div>
       </div>
