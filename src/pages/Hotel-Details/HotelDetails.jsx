@@ -10,6 +10,8 @@ const HotelDetails = () => {
 
   const { id } = useParams();
   const [hotelData, setHotelData] = useState([]);
+  const [selectedRoom, setSelectedRoom] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const getHotelDetails = async () => {
@@ -98,6 +100,11 @@ const HotelDetails = () => {
     style.innerHTML = MediaQuery;
     document.head.appendChild(style);
   };
+  const handleOpenModal =(room)=>{
+    setSelectedRoom(room);
+    setModalOpen(true);
+  }
+
   addGlobalStyle();
   return (
     <div style={styles.container}>
@@ -123,12 +130,13 @@ const HotelDetails = () => {
             priceSingle={room.price}
             bookingId={room.id}
             roomDetails={room} // passing rooms data to next booking component via button click
+            
           />
         ))}
       </div>
       <h3 style={{marginLeft:'10px'}}>About the {hotelData.name}</h3>
       <p style={styles.para}>{hotelData.description}</p>
-      {/* <BookingModal images={roomData.image_urls} name={roomData.name} price={roomData.price}/> */}
+      
     </div>
   );
 };

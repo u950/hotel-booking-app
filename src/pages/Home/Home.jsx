@@ -37,7 +37,7 @@ const Home = () => {
     try {
       const data = await fetchHotelList(pages, pageSize);
       setHotels(data.hotels);
-      console.log(data.hotels);
+      // console.log(data.hotels);
     } catch (e) {
       console.log('Error fetching hotels:', e);
       setError('Failed to load hotels. Please try again later.');
@@ -95,10 +95,15 @@ const Home = () => {
   const grids = {
     padding: '25px',
     display: 'flex',
+    flexDirection: 'row',
     minHeight: '100vh',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     position: 'relative',
+    '@media (max-width: 768px)': {
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
   };
   const gridStyle = { 
     display: 'grid', 
@@ -119,13 +124,20 @@ const Home = () => {
 
   const filterStyle = {
     display: 'flex',
+    flexDirection: 'column',
     top: '80px',
-    width: '25%',
+    width: '100%',
     height: 'fit-content',
     textAlign: 'center',
-    marginLeft: '10px',
+    marginLeft: '0',
     padding: '15px',
     backgroundColor: 'white',
+    '@media (min-width: 769px)': {
+      width: '25%',
+      marginLeft: '10px',
+      marginTop: '30px',
+      
+    },
   };
 
 
@@ -172,7 +184,7 @@ const Home = () => {
           <h3 style={filterStyle} className='filters'>Filters</h3>
 
           {/* price filter */}
-          <h4>Price Range</h4>
+          <h4 style={{marginTop: '10px'}}>Price Range</h4>
           {
             priceRanges.map((key,i)=>(
               <label style={{display:'flex', alignItems: 'center'}}>

@@ -1,183 +1,127 @@
-import React, { useEffect, useState ,} from "react";
-import { useLocation, useParams } from "react-router-dom";
-import Button from "../Button/Button"; // Reusable Button component
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import Image from "../../pages/Hotel-Details/image";
+import "../Button/Button.css";
 
-const BookingModal = ({id, data}) => {
-
-  // const {guest} = useContext(PeopleCount);
-
+const BookingModal = () => {
   const location = useLocation();
-  const { bookingDetails , parentId} = location.state || {};
-  // const {bookingId} = useParams();
+  const navigate = useNavigate();
 
+  const { bookingDetails } = location.state || {};
+  const [finalData, setFinalData] = useState([]);
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [people, setPeople] = useState([{ name: "" }]);
-  // const [data, setData] = useState([])
-  // const [currentIdx, setCurrentIdx] = useState(0);
-  // const [roomImages, setRoomImages] = useState([])
-  const [loading, setLoading] = useState(true);
 
-  console.log('parent id ',parentId)
-
-  console.log(data);
-
-
-  // if(loading){
-  //   return <div>Loading...</div>
-  // }
-
-  const cardStyle = {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "20px",
-    border: "1px solid #ddd",
-    borderRadius: "12px",
-    padding: "30px",
-    maxWidth: "900px",
-    margin: "50px auto",
-    boxShadow: "0 6px 12px rgba(0, 0, 0, 0.15)",
-    backgroundColor: "#f9f9f9",
-  };
-
-  const imgWrapperStyle = {
-    position: "relative",
-    flex: "1 1 40%",
-    maxWidth: "400px",
-  };
-
-  const imgStyle = {
-    width: "100%",
-    height: "320px",
-    borderRadius: "10px",
-    objectFit: "cover",
-    border: "2px solid #ddd",
-  };
-
-  const roomNameStyle = {
-    position: "absolute",
-    top: "10px",
-    left: "10px",
-    backgroundColor: "rgba(0, 0, 0, 0.7)",
-    color: "#fff",
-    padding: "5px 10px",
-    borderRadius: "8px",
-    fontSize: "18px",
-    fontWeight: "bold",
-  };
-
-  const contentStyle = {
-    flex: "1 1 50%",
-    display: "flex",
-    flexDirection: "column",
-    gap: "20px",
-  };
-
-  const formStyle = {
-    display: "flex",
-    flexDirection: "column",
-    gap: "15px",
-    marginTop: "20px",
-  };
-
-  const amenitiesStyle = {
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-  };
-
-  const formSelect = {
-    padding: "12px",
-    fontSize: "16px",
-    border: "1px solid #ccc",
-    borderRadius: "8px",
-    background: "#fff",
-    width: "100%",
-    textAlign: "center",
-  };
-
-  const inputStyle = {
-    padding: "12px",
-    fontSize: "16px",
-    border: "1px solid #ccc",
-    borderRadius: "8px",
-    width: "94.5%",
-  };
-
-  const handleAddPerson = () => {
-    if (people[people.length - 1].name !== "") {
-      setPeople([...people, { name: "" }]);
+  useEffect(() => {
+    if (bookingDetails) {
+      setFinalData(bookingDetails);
     }
-  };
+  }, [bookingDetails]);
 
-  const handlePersonChange = (index, value) => {
+  const handlePersonChange = (index, name) => {
     const updatedPeople = [...people];
-    updatedPeople[index].name = value;
+    updatedPeople[index].name = name;
     setPeople(updatedPeople);
   };
 
+  const handleAddPerson = () => {
+    setPeople([...people, { name: "" }]);
+  };
 
+  const handleClearAll = () => {
+    setPeople([{ name: "" }]);
+    setCheckIn("");
+    setCheckOut("");
+  };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Input validation
+    if (!checkIn || !checkOut) {
+      alert("Please select both Check-In and Check-Out dates.");
+      return;
+    }
+    if (new Date(checkIn) >= new Date(checkOut)) {
+      alert("Check-Out date must be later than Check-In date.");
+      return;
+    }
+    const validPeople = people.filter((person) => person.name?.trim());
+    if (validPeople.length === 0) {
+      alert("Please enter at least one person's name.");
+      return;
+    }
+
+    alert(
+      `Booking Done for:\n- Check-In: ${checkIn}\n- Check-Out: ${checkOut}\n- People: ${validPeople
+        .map((p) => p.name)
+        .join(", ")}\nNavigating to home page in few seconds.`
+    );
+
+    setTimeout(() => {
+      navigate(`/`,{replace : true});
+    }, 500);
+  };
 
   return (
     <div style={cardStyle}>
       {/* Image Section */}
-      {/* {parentId} */}
-      
-      <div style={imgWrapperStyle}>
-        {/* <img src={roomImages[currentIdx]} alt="Room" style={imgStyle} /> */}
-        {/* <div style={roomNameStyle}>{data.name}</div> */}
-      </div>
+      {finalData && finalData.image_urls?.length > 0 ? (
+        <Image name={finalData.name} image_Url={finalData.image_urls} />
+      ) : (
+        <p>No image available</p>
+      )}
 
       {/* Content Section */}
       <div style={contentStyle}>
-        {/* Amenities Section */}
+        {/* Amenities */}
         <div style={{ display: "flex", gap: "50px" }}>
           <div style={amenitiesStyle}>
             <h3 style={{ marginBottom: "10px", color: "#333" }}>Amenities</h3>
-            {/* {data.amenities.map((amenity, index) => (
-              <p key={index} style={{ margin: "5px 0", color: "#555" }}>
-                - {amenity}
-              </p>
-            ))} */}
+            <p >{finalData.amenities?.join(", ")}</p>
           </div>
-          <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", gap: "20px" }}>
-            <select
-              style={formSelect}
-              value={checkIn}
-              onChange={(e) => setCheckIn(e.target.value)}
-            >
-              <option value="" disabled>
-                📅 Check-In Date
-              </option>
-              {generateDateOptions().map((date) => (
-                <option key={date} value={date}>
-                  {date}
-                </option>
-              ))}
-            </select>
 
-            {/* Check-Out Dropdown */}
-            <select
-              style={formSelect}
-              value={checkOut}
-              onChange={(e) => setCheckOut(e.target.value)}
-            >
-              <option value="" disabled>
-                📅 Check-Out Date
-              </option>
-              {generateDateOptions().map((date) => (
-                <option key={date} value={date}>
-                  {date}
+          {/* Date Selection */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+            <label>
+              <select
+                style={formSelect}
+                value={checkIn}
+                onChange={(e) => setCheckIn(e.target.value)}
+              >
+                <option value="" disabled>
+                  📅 Check-In Date
                 </option>
-              ))}
-            </select>
+                {generateDateOptions().map((date) => (
+                  <option key={date} value={date}>
+                    {date}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              <select
+                style={formSelect}
+                value={checkOut}
+                onChange={(e) => setCheckOut(e.target.value)}
+              >
+                <option value="" disabled>
+                  📅 Check-Out Date
+                </option>
+                {generateDateOptions().map((date) => (
+                  <option key={date} value={date}>
+                    {date}
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
         </div>
 
         {/* Booking Form */}
-        <form style={formStyle}>
-          {/* Input fields for people */}
+        <form style={formStyle} onSubmit={handleSubmit}>
+          {/* People Input */}
           {people.map((person, index) => (
             <input
               key={index}
@@ -189,17 +133,28 @@ const BookingModal = ({id, data}) => {
             />
           ))}
 
-          {/* Add More People Button */}
-          <Button
-            buttonName="+ Add Person"
-            onClick={(e) => {
-              e.preventDefault();
-              handleAddPerson();
-            }}
-          />
+          {/* Buttons */}
+          <div style={{ display: "flex", justifyContent: "center", gap: "20px" }}>
+            <button
+              className="button-style"
+              type="button"
+              onClick={handleClearAll}
+            >
+              Clear All
+            </button>
+            <button
+              className="button-style"
+              type="button"
+              onClick={handleAddPerson}
+            >
+              + Add Person
+            </button>
+          </div>
 
-          {/* Booking Button */}
-          <Button buttonName="Book" />
+          {/* Submit Button */}
+          <button type="submit" className="button-style">
+            Book Room
+          </button>
         </form>
       </div>
     </div>
@@ -222,5 +177,60 @@ const generateDateOptions = () => {
 
   return options;
 };
+
+// Styling
+const cardStyle = {
+  display: "flex",
+  flexWrap: "wrap",
+  gap: "20px",
+  border: "1px solid #ddd",
+  borderRadius: "12px",
+  padding: "30px",
+  maxWidth: "900px",
+  margin: "50px auto",
+  boxShadow: "0 6px 12px rgba(0, 0, 0, 0.15)",
+  backgroundColor: "#f9f9f9",
+};
+
+
+const contentStyle = {
+  flex: "1 1 50%",
+  display: "flex",
+  flexDirection: "column",
+  gap: "20px",
+};
+
+const formStyle = {
+  display: "flex",
+  flexDirection: "column",
+  gap: "15px",
+  marginTop: "20px",
+  cursor:'pointer'
+};
+
+const amenitiesStyle = {
+  display: "flex",
+  flexDirection: "column",
+  gap: "10px",
+};
+
+const formSelect = {
+  padding: "12px",
+  fontSize: "16px",
+  border: "1px solid #ccc",
+  borderRadius: "8px",
+  background: "#fff",
+  width: "100%",
+  textAlign: "center",
+};
+
+const inputStyle = {
+  padding: "12px",
+  fontSize: "16px",
+  border: "1px solid #ccc",
+  borderRadius: "8px",
+  width: "94.5%",
+};
+
 
 export default BookingModal;

@@ -33,13 +33,14 @@ const styles = {
     justifyContent: 'space-between',
     maxWidth: '1200px',
     margin: '0 auto',
+    padding: '0 10px',
   },
   navLinks: {
     display: 'flex',
     alignItems: 'center',
-    gap: '50px',
+    gap: '20px',
     '@media (max-width: 768px)': {
-      display: 'none', // Hide on mobile
+      display: 'none',
     },
   },
   navItem: {
@@ -67,7 +68,7 @@ const styles = {
   },
   mobileMenu: {
     // position: 'fixed',
-    top: '60px', // Height of navbar
+    top: '60px',
     left: 0,
     right: 0,
     background: 'white',
@@ -78,7 +79,7 @@ const styles = {
     '@media (max-width: 768px)': {
       display: 'flex',
       flexDirection: 'column',
-      gap: '20px',
+      gap: '15px',
     },
   },
   signInButton: {
@@ -92,7 +93,7 @@ const styles = {
       backgroundColor: '#0056b3',
     },
     '@media (max-width: 768px)': {
-      display: 'none', // Hide on mobile, will show in mobile menu
+      display: 'none',
     },
   }
 };
