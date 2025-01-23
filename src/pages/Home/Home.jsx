@@ -3,10 +3,14 @@ import HeroSection from '../../components/Hero-Section/Hero-Section';
 import { fetchHotelList } from '../../services/apiFetch';
 import HotelCard from '../../components/Hotel-Card/HotelCard';
 import { useLocation } from 'react-router-dom';
+import { priceRanges,cityValues, ratingValues } from './FilterValues';
 
 const Home = () => {
+  // useStates for 3 filtering categories
   const [selectedPriceRanges, setSelectedPriceRanges] = useState(['below1000']);
-  const [selectedCity, setSelectedCity] = useState('');
+  const [selectedCity, setSelectedCity] = useState('Delhi');
+  const [selectedRating, setSelectedRating] = useState(['0-1']);
+
   const [hotels, setHotels] = useState([]);
   const [filteredHotels, setFilteredHotels] = useState([]);
   const [pages, setPages] = useState(1);
@@ -39,6 +43,9 @@ const Home = () => {
   const filterHotels = () => {
     const selectedRangesSet = new Set(selectedPriceRanges);
 
+    // selected rating filtering 
+    const selectedRatingSet = new Set(selectedRating);
+
     const filtered = hotels.filter((hotel) => {
       // Check if at least one room matches the selected price ranges
       const priceMatch = hotel.rooms.some((room) => {
@@ -48,17 +55,25 @@ const Home = () => {
           (selectedRangesSet.has("2000-4000") && room.price > 2000 && room.price <= 4000) ||
           (selectedRangesSet.has("4000-6000") && room.price > 4000 && room.price <= 6000) ||
           (selectedRangesSet.has("6000-above") && room.price > 6000)
-        );
+        );        
       });
+
+        const ratingMatch = selectedRatingSet.has("0-1") && hotel.rating >= 0 && hotel.rating <= 1 ||
+          selectedRatingSet.has("1-2") && hotel.rating >= 1 && hotel.rating <= 2 ||
+          selectedRatingSet.has("2-3") && hotel.rating >= 2 && hotel.rating <= 3 ||
+          selectedRatingSet.has("3-4") && hotel.rating >= 3 && hotel.rating <= 4 ||
+          selectedRatingSet.has("4-5") && hotel.rating >= 4 && hotel.rating <= 5;
+
+      
 
       // Check if the hotel is in the selected city
       const cityMatch = selectedCity === '' || hotel.city === selectedCity;
 
-      return priceMatch && cityMatch;
+      return priceMatch && cityMatch && ratingMatch; // add filtered rating
     });
 
     setFilteredHotels(filtered);
-    console.log(filtered);
+    // console.log(filtered);
   };
 
   useEffect(() => {
@@ -67,7 +82,7 @@ const Home = () => {
 
   useEffect(() => {
     filterHotels();
-  }, [hotels, selectedPriceRanges, selectedCity]);
+  }, [hotels, selectedPriceRanges, selectedCity, selectedRating]);
 
   const grids = {
     padding: '25px',
@@ -96,8 +111,6 @@ const Home = () => {
 
   const filterStyle = {
     display: 'flex',
-    // flexDirection: 'column',
-    // position: 'sticky',
     top: '80px',
     width: '25%',
     height: 'fit-content',
@@ -106,6 +119,10 @@ const Home = () => {
     padding: '15px',
     backgroundColor: 'white',
   };
+
+
+
+  
 
   const handlePriceRangeChange = (event) => {
     const { value } = event.target;
@@ -118,6 +135,19 @@ const Home = () => {
     setSelectedCity(value); // Set the selected city directly
   };
 
+  // handling rating change
+  const handleRatingChange =(event)=>{
+    const { value } = event.target;
+    setSelectedRating((prev) =>{
+      if(prev.includes(value)){
+        return prev.filter((rating) => rating !== value);
+      }
+      // return [...prev, value];
+      return [value];
+    })
+    // Set the selected rating directly
+  }
+
   return (
     <div>
       <HeroSection />
@@ -127,91 +157,55 @@ const Home = () => {
         <div>
           <h3 style={filterStyle} className='filters'>Filters</h3>
 
+          {/* price filter */}
           <h4>Price Range</h4>
-          <label style={{display:'flex', alignItems: 'center'}}>
-            <input 
-              type="checkbox" 
-              value="below1000"
-              checked={selectedPriceRanges.includes("below1000")}
-              onChange={handlePriceRangeChange}
-            />
-            <p>Below 1000 Rs</p>
-          </label>
-          <label style={{display:'flex', alignItems: 'center'}}>
-            <input 
-              type="checkbox" 
-              value="1000-2000"
-              checked={selectedPriceRanges.includes("1000-2000")}
-              onChange={handlePriceRangeChange}
-            />
-            <p>1000 - 2000 Rs</p>
-          </label>
-          <label style={{display:'flex', alignItems: 'center'}}>
-            <input 
-              type="checkbox" 
-              value="2000-4000"
-              checked={selectedPriceRanges.includes("2000-4000")}
-              onChange={handlePriceRangeChange}
-            />
-            <p>2000 - 4000 Rs</p>
-          </label>
-          <label style={{display:'flex', alignItems: 'center'}}>
-            <input 
-              type="checkbox" 
-              value="4000-6000"
-              checked={selectedPriceRanges.includes("4000-6000")}
-              onChange={handlePriceRangeChange}
-            />
-            <p>4000 - 6000 Rs</p>
-          </label >
-          <label style={{display:'flex', alignItems: 'center'}}>
-            <input 
-              type="checkbox" 
-              value="6000-above"
-              checked={selectedPriceRanges.includes("6000-above")}
-              onChange={handlePriceRangeChange}
-            />
-            <p>6000 and Above</p>
-          </label >
+          {
+            priceRanges.map((key,i)=>(
+              <label style={{display:'flex', alignItems: 'center'}}>
+                <input
+                  type="checkbox"
+                  value={key.value}
+                  checked={selectedPriceRanges.includes(key.value)}
+                  onChange={handlePriceRangeChange}
+                />
+                <p>{key.type}</p>
+              </label>
+            ))
+          }
 
+          {/* city filter */}
           <h4>City</h4>
-          <label style={{display:'flex', alignItems: 'center'}}>
-            <input 
-              type="checkbox" 
-              value="Delhi" 
-              checked={selectedCity === "Delhi"} 
-              onChange={handleCityChange} 
-            />
-            <p>Delhi</p>
-          </label >
-          <label style={{display:'flex', alignItems: 'center'}}>
-            <input 
-              type="checkbox" 
-              value="Hyderabad" 
-              checked={selectedCity === "Hyderabad"} 
-              onChange={handleCityChange} 
-            />
-            <p>Hyderabad</p>
-          </label>
-          <label style={{display:'flex', alignItems: 'center'}}>
-            <input 
-              type="checkbox" 
-              value="Goa" 
-              checked={selectedCity === "Goa"} 
-              onChange={handleCityChange} 
-            />
-            <p>Goa</p>
-          </label >
-          <label style={{display:'flex', alignItems: 'center'}}>
-            <input 
-              type="checkbox" 
-              value="Mumbai" 
-              checked={selectedCity === "Mumbai"} 
-              onChange={handleCityChange} 
-            />
-            <p>Mumbai</p>
-          </label>
+          {
+            cityValues.map((key, idx) =>(
+              <label style={{display:'flex', alignItems: 'center'}}>
+                <input
+                  type='checkbox'
+                  value={key.value}
+                  checked={selectedCity === key.value}
+                  onChange={handleCityChange}
+                />
+                <p>{key.type}</p>
+              </label>
+            ))
+          }
+
+          {/* rating filter */}
+          <h4>Rating</h4>
+          {
+            ratingValues.map((key,i)=>(
+              <label style={{display:'flex', alignItems: 'center'}}>
+                <input
+                  type='checkbox'
+                  value={key.value}
+                  checked={selectedRating.includes(key.value)}
+                  onChange={handleRatingChange}
+                />
+                <p>{key.type}</p>
+              </label>
+            ))
+          }
         </div>
+
               {/* search term for filtering  */}
         <div style={ExploreStyle} className='explore'>
           <h1>Explore Hotels </h1> 
@@ -222,6 +216,7 @@ const Home = () => {
             <p>{error}</p>
           ) : filteredHotels.length > 0 ? (
             <div style={gridStyle}>
+
               {filteredHotels.map((hotel) => (
                 <HotelCard
                   key={hotel.id}
@@ -237,7 +232,7 @@ const Home = () => {
               ))}
             </div>
           ) : (
-            <p>No hotels found within the selected price range.</p>
+            <p style={{color: 'red'}}>No hotels found within the selected price range.</p>
           )}
 
           <div>
