@@ -2,8 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import './Button.css'
 import { useNavigate } from 'react-router-dom'
+// import BookingModal from '../Booking-Modal/BookingModal'
 
-const Button = ({buttonName, id,hotelName, city,rating,rooms,img,imgURL, price, bookingId , bookingDetails}) => {
+const Button = ({buttonName, id,parentId, img, bookingId , bookingDetails}) => {
 
   const navigate = useNavigate();   // navigation 
   
@@ -15,8 +16,8 @@ const Button = ({buttonName, id,hotelName, city,rating,rooms,img,imgURL, price, 
 
     } else if(bookingId){
 
-      navigate(`/hotel/booking/${bookingId}`,{state:{bookingDetails, img}});  // parent hotelId
-
+      navigate(`/hotel/booking/${bookingId}`,{state:{bookingDetails,parentId}});  // parent hotelId
+       
     }
   }
   return (

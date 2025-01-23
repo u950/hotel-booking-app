@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const HotelCard = ({
   id,
+  keyid,
   name,
   city,
   rooms = [],
@@ -136,6 +137,7 @@ const HotelCard = ({
             heroImage={imageUrl || undefined}
             bookingId={bookingId || undefined}
             bookingDetails={roomDetails || undefined} // Room details array from API
+            parentId={keyid || undefined}
           />
         </section>
       </div>

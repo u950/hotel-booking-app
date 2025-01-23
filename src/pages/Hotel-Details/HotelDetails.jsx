@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import HotelCard from '../../components/Hotel-Card/HotelCard';
 import { fetchHotelDetails } from '../../services/apiFetch';
+import BookingModal from '../../components/Booking-Modal/BookingModal';
 
 const HotelDetails = () => {
   const location = useLocation();
@@ -113,7 +114,7 @@ const HotelDetails = () => {
       <div style={styles.grid}>
         {roomData.map((room, i) => (
           <HotelCard
-            key={i}
+            keyid={id}   // keyid for hotlid parent id
             ImageUrls={room.image_urls}
             name={room.name}
             price={room.price}
@@ -127,6 +128,7 @@ const HotelDetails = () => {
       </div>
       <h3 style={{marginLeft:'10px'}}>About the {hotelData.name}</h3>
       <p style={styles.para}>{hotelData.description}</p>
+      {/* <BookingModal images={roomData.image_urls} name={roomData.name} price={roomData.price}/> */}
     </div>
   );
 };

@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, createContext, useContext } from 'react';
 import './SearchForm.css';
 import { fetchHotels } from '../../services/apiFetch';
 import { useNavigate } from 'react-router-dom';
 
-const SearchForm = () => {
+export const PeopleCount = createContext();
+
+const SearchForm = ({ children }) => {
+
+ // for sharing to booking page
+
   const [place, setPlace] = useState("");
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
@@ -45,7 +50,7 @@ const SearchForm = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    if (!place) {
+    if (!guest && !place) {
       alert("Please fill in all fields.");
       return;
     }
@@ -70,81 +75,83 @@ const SearchForm = () => {
   };
 
   return (
-    <div className="form-container">
-      <form onSubmit={handleOnSubmit} className="search-form">
-        {/* Location input field */}
-        <div className="search-input-container">
-          <input
-            value={place}
-            placeholder='📍 Type city, place or hotel name  🔎'
-            className="search-input"
-            onChange={(e) => {
-              setPlace(e.target.value); // Show suggestions on input change
-            }}
-            onFocus={() => setShowSuggestions(true)} // Show suggestions on focus
-            onBlur={() => setTimeout(() => setShowSuggestions(false), 1000)} // Delay to prevent blur from hiding suggestions too quickly
-          />
-          {showSuggestions && suggestions.length > 0 && (
-            <ul className='suggestions-dropdown'>
-              {suggestions.map((suggestion) => (
-                <li
-                  key={suggestion.id}
-                  onClick={() => handleSuggestionClick(suggestion)} // Update input on suggestion click
-                  className='suggestion-item'
-                >
-                  <span className='hotel-name'>{suggestion.name}🏠</span>
-                  <span className='hotel-city'>{suggestion.city}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+    <PeopleCount.Provider value={{ guest }}>
+      <div className="form-container">
+        <form onSubmit={handleOnSubmit} className="search-form">
+          {/* Location input field */}
+          <div className="search-input-container">
+            <input
+              value={place}
+              placeholder='📍 Type city, place or hotel name  🔎'
+              className="search-input"
+              onChange={(e) => {
+                setPlace(e.target.value); // Show suggestions on input change
+              }}
+              onFocus={() => setShowSuggestions(true)} // Show suggestions on focus
+              onBlur={() => setTimeout(() => setShowSuggestions(false), 1000)} // Delay to prevent blur from hiding suggestions too quickly
+            />
+            {showSuggestions && suggestions.length > 0 && (
+              <ul className='suggestions-dropdown'>
+                {suggestions.map((suggestion) => (
+                  <li
+                    key={suggestion.id}
+                    onClick={() => handleSuggestionClick(suggestion)} // Update input on suggestion click
+                    className='suggestion-item'
+                  >
+                    <span className='hotel-name'>{suggestion.name}🏠</span>
+                    <span className='hotel-city'>{suggestion.city}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
 
-        {/* Check-In dropdown */}
-        <select
-          className='form-select'
-          value={checkIn}
-          onChange={(e) => setCheckIn(e.target.value)}
-        >
-          <option value="" disabled> 📅 Check-In Date</option>
-          {generateDateOptions().map((date) => (
-            <option key={date} value={date}>{date}</option>
-          ))}
-        </select>
+          {/* Check-In dropdown */}
+          <select
+            className='form-select'
+            value={checkIn}
+            onChange={(e) => setCheckIn(e.target.value)}
+          >
+            <option value="" disabled> 📅 Check-In Date</option>
+            {generateDateOptions().map((date) => (
+              <option key={date} value={date}>{date}</option>
+            ))}
+          </select>
 
-        {/* Check-Out dropdown */}
-        <select
-          className="form-select"
-          value={checkOut}
-          onChange={(e) => setCheckOut(e.target.value)}
-        >
-          <option value="" disabled> 📅 Check-Out Date</option>
-          {generateDateOptions().map((date) => (
-            <option key={date} value={date}>{date}</option>
-          ))}
-        </select>
+          {/* Check-Out dropdown */}
+          <select
+            className="form-select"
+            value={checkOut}
+            onChange={(e) => setCheckOut(e.target.value)}
+          >
+            <option value="" disabled> 📅 Check-Out Date</option>
+            {generateDateOptions().map((date) => (
+              <option key={date} value={date}>{date}</option>
+            ))}
+          </select>
 
-        {/* Guest input */}
-        <div className="guest-container">
-          <input
-            type="number"
-            min='1'
-            max='6'
-            value={guest}
-            onChange={(e) => setGuest(e.target.value)}
-            className='guest-input'
-            placeholder='👥 Guests'
-          />
-        </div>
+          {/* Guest input */}
+          <div className="guest-container">
+            <input
+              type="number"
+              min='1'
+              max='6'
+              value={guest}
+              onChange={(e) => setGuest(e.target.value)}
+              className='guest-input'
+              placeholder='👥 Guests'
+            />
+          </div>
 
-        <button type="submit" className="search-button"
-          onClick={()=>{
-            setClickSearchButton(true)
-            setTimeout(()=>setClickSearchButton(false), 500)}}
-        >Search</button>
-        {clickSearchButton && <p style={{color: 'blue'}}>searching...</p>}
-      </form>
-    </div>
+          <button type="submit" className="search-button"
+            onClick={()=>{
+              setClickSearchButton(true)
+              setTimeout(()=>setClickSearchButton(false), 500)}}
+          >Search</button>
+          {clickSearchButton && <p style={{color: 'blue'}}>searching...</p>}
+        </form>
+      </div>
+    </PeopleCount.Provider>
   );
 };
 
