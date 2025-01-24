@@ -131,6 +131,7 @@ const Home = () => {
   const filterStyle = {
     display: 'flex',
     flexDirection: 'column',
+    position: 'relative',
     top: '80px',
     width: '100%',
     height: 'fit-content',
@@ -138,6 +139,7 @@ const Home = () => {
     marginLeft: '0',
     padding: '15px',
     backgroundColor: 'white',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     '@media (min-width: 769px)': {
       width: '25%',
       marginLeft: '10px',
@@ -145,12 +147,13 @@ const Home = () => {
     '@media (max-width: 768px)': {
       width: '100%',
       marginTop: '10px',
+      padding: '10px',
+      boxShadow: 'none',
     },
   };
 
 
-
-  
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const handlePriceRangeChange = (event) => {
     const { value } = event.target;
@@ -191,7 +194,7 @@ const Home = () => {
       <br />
       <div style={grids}>
         <div>
-          <h3 style={filterStyle} className='filters'>Filters</h3>
+          <h3  className='filters'>Filters</h3>
 
           {/* price filter */}
           <h4 style={{marginTop: '10px'}}>Price Range</h4>
@@ -242,8 +245,8 @@ const Home = () => {
           }
         </div>
 
-              {/* search term for filtering  */}
-        <div style={ExploreStyle} className='explore'>
+        {/* search term for filtering  */}
+        <div style={ExploreStyle} >
           <h1>Explore Hotels </h1> 
 
           {loading ? (

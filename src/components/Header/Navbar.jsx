@@ -1,11 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import React, { useState } from 'react';
 import { css } from '@emotion/react';
+import { Link, useLocation } from 'react-router-dom';
 import Logo from '../../assets/images/logo';
-import { Link } from 'react-router-dom';
-import Home from '../../pages/Home/Home';
 
-// Navbar styles
 const navStyles = css`
   position: fixed;
   top: 0;
@@ -110,10 +108,18 @@ const signInButton = css`
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation(); // Get the current path
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  // Common links
+  const links = [
+    { to: '/', label: 'Home' },
+    { to: '/hotel', label: 'Hotel' },
+    { to: '/places', label: 'Places' },
+  ];
 
   return (
     <>
@@ -123,15 +129,18 @@ const Navbar = () => {
             <Logo />
           </div>
           <div css={navLinks}>
-            <Link to="/" css={navItem} component={Home}>
-              Home
-            </Link>
-            <Link to="/hotel" css={navItem}>
-              Hotel
-            </Link>
-            <Link to="/" css={navItem}>
-              Places
-            </Link>
+            {links.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                css={navItem}
+                style={{
+                  fontWeight: location.pathname === link.to ? 'bold' : '500',
+                }}
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
           <Link to="/" css={signInButton}>
             Sign In
@@ -150,21 +159,21 @@ const Navbar = () => {
       {/* Mobile menu */}
       {isMenuOpen && (
         <div css={mobileMenu}>
-          <Link to="/" css={navItem} onClick={toggleMenu}>
-            Home
-          </Link>
-          <Link to="/hotel" css={navItem} onClick={toggleMenu}>
-            Hotel
-          </Link>
-          <Link to="/" css={navItem} onClick={toggleMenu}>
-            Places
-          </Link>
+          {links.map((link) => (
+            <Link
+              key={link.to}
+              to={link.to}
+              css={navItem}
+              onClick={toggleMenu}
+            >
+              {link.label}
+            </Link>
+          ))}
           <Link to="/" css={navItem} onClick={toggleMenu}>
             Sign In
           </Link>
         </div>
       )}
-      {/* Add padding to body to prevent content from hiding under fixed navbar */}
       <div css={css`padding-top: 60px;`} />
     </>
   );

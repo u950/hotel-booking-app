@@ -9,13 +9,13 @@ import Navbar from './components/Header/Navbar.jsx'
 const App = () => {
   return (
     <div>
-      <Navbar/>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/hotel" element={<ExploreHotel />} />
-        <Route path="/hotel/:id" element={<HotelDetails />} />
-        <Route path="/hotel/booking/:id" element={<BookingModal />} />
-      </Routes>
+        <Navbar />
+        <Routes>
+          <Route index element={<Home />} />
+          <Route path="/hotel" element={<ExploreHotel />} />
+          <Route path="/hotel/:id" element={<HotelDetails />} />
+          <Route path="/hotel/booking/:id" element={<BookingModal />} />
+        </Routes>
     </div>
   )
 }
