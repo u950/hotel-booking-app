@@ -204,11 +204,11 @@ const Home = () => {
         <HeroSection />
       </div>
       <br />
-      {!window.innerWidth > 768 && <div >
-        <button style={filterButtonStyle} onClick={toggleFilter}>
+        <div >
+        <button className='button-style' onClick={toggleFilter}>
           {isFilterOpen ? 'Hide Filters' : 'Show Filters'}
         </button>
-      </div>}
+      </div>
       <div style={grids}>
         <div style={filterStyle}>
           <h3 className="filters">Filters</h3>
