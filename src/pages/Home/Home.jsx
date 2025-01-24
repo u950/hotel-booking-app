@@ -26,6 +26,7 @@ const Home = () => {
 
   const [searchTerm, setSearchTerm] = useState(place);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 768);
 
 
 
@@ -95,6 +96,16 @@ const Home = () => {
     filterHotels();
   }, [hotels, selectedPriceRanges, selectedCity, selectedRating]);
 
+  useEffect(() => {
+    // Event listener to detect screen width changes
+    const handleResize = () => {
+      setIsMobileView(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const grids = {
     padding: '25px',
     display: 'flex',
@@ -133,34 +144,10 @@ const Home = () => {
     },
   };
 
-  const filterStyle = {
-    display: isFilterOpen || window.innerWidth > 768 ? 'flex' : 'none',
-    flexDirection: 'column',
-    position: 'relative',
-    top: '80px',
-    width: '10%',
-    height: 'fit-content',
-    textAlign: 'left',
-    marginLeft: '0',
-    padding: '15px',
-    backgroundColor: 'white',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    '@media (max-width: 768px)': {
-      position: 'absolute',
-      top: '60px',
-      left: '0',
-      right: '0',
-      zIndex: '1000',
-    },
-  };
-
   const filterButtonStyle = {
-    display: 'none',
-    '@media (max-width: 768px)': {
-      display: 'block',
-      margin: '10px',
-      padding: '10px',
-    },
+    display: isMobileView ? 'block' : 'none',
+    margin: '10px',
+    padding: '10px',
   };
 
   const handlePriceRangeChange = (event) => {
@@ -197,6 +184,19 @@ const Home = () => {
     setIsFilterOpen(!isFilterOpen);
   };
 
+  // Style for the filter section to show by default on desktop
+  const filterStyle = {
+    display: isMobileView ? (isFilterOpen ? 'block' : 'none') : 'flex', // Show filters by default on desktop
+    flexDirection: 'column',
+    padding: '20px',
+    backgroundColor: 'white',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    borderRadius: '8px',
+    width: '10%', // Full width for mobile
+    maxWidth: '400px', // Max width for desktop
+    margin: isMobileView ? '0 auto' : '0', // Center on mobile
+  };
+
   return (
     <div>
       <div style={{display: 'flex', flexDirection: 'column'}}>
@@ -205,64 +205,151 @@ const Home = () => {
       </div>
       <br />
         <div >
-        <button className='button-style' onClick={toggleFilter}>
+        <button
+          className="button-style"
+          style={filterButtonStyle}
+          onClick={toggleFilter}
+          disabled={!isMobileView}
+        >
           {isFilterOpen ? 'Hide Filters' : 'Show Filters'}
         </button>
       </div>
-      <div style={grids}>
-        <div style={filterStyle}>
-          <h3 className="filters">Filters</h3>
 
-          {/* price filter */}
-          <h4 style={{marginTop: '10px'}}>Price Range</h4>
-          {
-            priceRanges.map((key,i)=>(
-              <label style={{display:'flex', alignItems: 'center'}}>
+      {/* Mobile Filter Pop-up */}
+      {isMobileView && isFilterOpen && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)', // Backdrop
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1000,
+          }}
+          onClick={toggleFilter} // Close modal on clicking backdrop
+        >
+          <div
+            style={{
+              backgroundColor: 'white',
+              width: '90%',
+              maxWidth: '400px',
+              padding: '20px',
+              borderRadius: '10px',
+              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+              position: 'relative',
+            }}
+            onClick={(e) => e.stopPropagation()} // Prevent modal close on card click
+          >
+            {/* Close Button for Mobile Filters */}
+            <button
+              style={{
+                position: 'absolute',
+                top: '10px',
+                right: '10px',
+                background: 'none',
+                border: 'none',
+                fontSize: '20px',
+                cursor: 'pointer',
+              }}
+              onClick={toggleFilter}
+            >
+              &times; {/* Close icon */}
+            </button>
+
+            <h3 className="filters">Filters</h3>
+
+            {/* Price Filter */}
+            <h4 style={{ marginTop: '10px' }}>Price Range</h4>
+            {priceRanges.map((key, i) => (
+              <label style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }} key={i}>
                 <input
                   type="checkbox"
                   value={key.value}
                   checked={selectedPriceRanges.includes(key.value)}
                   onChange={handlePriceRangeChange}
                 />
-                <p>{key.type}</p>
+                <p style={{ marginLeft: '5px' }}>{key.type}</p>
               </label>
-            ))
-          }
+            ))}
 
-          {/* city filter */}
-          <h4>City</h4>
-          {
-            cityValues.map((key, idx) =>(
-              <label style={{display:'flex', alignItems: 'center'}}>
+            {/* City Filter */}
+            <h4>City</h4>
+            {cityValues.map((key, idx) => (
+              <label style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }} key={idx}>
                 <input
-                  type='checkbox'
+                  type="checkbox"
                   value={key.value}
                   checked={selectedCity === key.value}
                   onChange={handleCityChange}
                 />
-                <p>{key.type}</p>
+                <p style={{ marginLeft: '5px' }}>{key.type}</p>
               </label>
-            ))
-          }
+            ))}
 
-          {/* rating filter */}
-          <h4>Rating</h4>
-          {
-            ratingValues.map((key,i)=>(
-              <label style={{display:'flex', alignItems: 'center'}}>
+            {/* Rating Filter */}
+            <h4>Rating</h4>
+            {ratingValues.map((key, i) => (
+              <label style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }} key={i}>
                 <input
-                  type='checkbox'
+                  type="checkbox"
                   value={key.value}
                   checked={selectedRating.includes(key.value)}
                   onChange={handleRatingChange}
                 />
-                <p>{key.type}</p>
+                <p style={{ marginLeft: '5px' }}>{key.type}</p>
               </label>
-            ))
-          }
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div style={grids}>
+        <div style={filterStyle}>
+          {/* Filter Section (if needed for desktop) */}
+          <h3 className="filters">Filters</h3>
+          {/* Price, City, Rating Filters */}
+          <h4 style={{ marginTop: '10px' }}>Price Range</h4>
+          {priceRanges.map((key, i) => (
+            <label style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }} key={i}>
+              <input
+                type="checkbox"
+                value={key.value}
+                checked={selectedPriceRanges.includes(key.value)}
+                onChange={handlePriceRangeChange}
+              />
+              <p style={{ marginLeft: '5px' }}>{key.type}</p>
+            </label>
+          ))}
+          <h4>City</h4>
+          {cityValues.map((key, idx) => (
+            <label style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }} key={idx}>
+              <input
+                type="checkbox"
+                value={key.value}
+                checked={selectedCity === key.value}
+                onChange={handleCityChange}
+              />
+              <p style={{ marginLeft: '5px' }}>{key.type}</p>
+            </label>
+          ))}
+          <h4>Rating</h4>
+          {ratingValues.map((key, i) => (
+            <label style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }} key={i}>
+              <input
+                type="checkbox"
+                value={key.value}
+                checked={selectedRating.includes(key.value)}
+                onChange={handleRatingChange}
+              />
+              <p style={{ marginLeft: '5px' }}>{key.type}</p>
+            </label>
+          ))}
         </div>
 
-        {/* search term for filtering  */}
         <div style={ExploreStyle} >
           <h1>Explore Hotels</h1>
           {loading ? (
