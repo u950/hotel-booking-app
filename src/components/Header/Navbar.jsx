@@ -118,7 +118,7 @@ const Navbar = () => {
   const links = [
     { to: '/hotel-booking-app', label: 'Home' },
     { to: '/hotel', label: 'Hotel' },
-    { to: '/places', label: 'Places' },
+    { to: '/hotel-booking-app', label: 'Places' },
   ];
 
   return (
