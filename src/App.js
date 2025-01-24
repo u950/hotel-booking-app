@@ -11,7 +11,7 @@ const App = () => {
     <div>
         <Navbar />
         <Routes>
-          <Route index element={<Home />} />
+          <Route path='/hotel-booking-app' element={<Home />} />
           <Route path="/hotel" element={<ExploreHotel />} />
           <Route path="/hotel/:id" element={<HotelDetails />} />
           <Route path="/hotel/booking/:id" element={<BookingModal />} />

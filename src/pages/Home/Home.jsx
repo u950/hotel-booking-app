@@ -195,6 +195,8 @@ const Home = () => {
     width: '10%', // Full width for mobile
     maxWidth: '400px', // Max width for desktop
     margin: isMobileView ? '0 auto' : '0', // Center on mobile
+    overflowY:'auto',
+    height: '50%',
   };
 
   return (

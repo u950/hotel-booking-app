@@ -116,7 +116,7 @@ const Navbar = () => {
 
   // Common links
   const links = [
-    { to: '/', label: 'Home' },
+    { to: '/hotel-booking-app', label: 'Home' },
     { to: '/hotel', label: 'Hotel' },
     { to: '/places', label: 'Places' },
   ];

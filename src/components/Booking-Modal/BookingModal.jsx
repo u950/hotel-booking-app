@@ -60,7 +60,7 @@ const BookingModal = () => {
     );
 
     setTimeout(() => {
-      navigate(`/`,{replace : true});
+      navigate(`/hotel-booking-app`,{replace : true});
     }, 500);
   };
 
