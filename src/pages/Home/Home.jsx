@@ -4,6 +4,7 @@ import { fetchHotelList } from '../../services/apiFetch';
 import HotelCard from '../../components/Hotel-Card/HotelCard';
 import { useLocation } from 'react-router-dom';
 import { priceRanges,cityValues, ratingValues } from './FilterValues';
+import Navbar from '../../components/Header/Navbar';
 
 const Home = () => {
   // useStates for 3 filtering categories
@@ -176,6 +177,7 @@ const Home = () => {
 
   return (
     <div>
+      <Navbar />
       <HeroSection />
 
       <br />

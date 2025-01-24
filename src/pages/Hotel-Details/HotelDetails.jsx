@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import HotelCard from '../../components/Hotel-Card/HotelCard';
 import { fetchHotelDetails } from '../../services/apiFetch';
-import BookingModal from '../../components/Booking-Modal/BookingModal';
 
 const HotelDetails = () => {
   const location = useLocation();
@@ -10,8 +9,6 @@ const HotelDetails = () => {
 
   const { id } = useParams();
   const [hotelData, setHotelData] = useState([]);
-  const [selectedRoom, setSelectedRoom] = useState([]);
-  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const getHotelDetails = async () => {
@@ -100,10 +97,7 @@ const HotelDetails = () => {
     style.innerHTML = MediaQuery;
     document.head.appendChild(style);
   };
-  const handleOpenModal =(room)=>{
-    setSelectedRoom(room);
-    setModalOpen(true);
-  }
+
 
   addGlobalStyle();
   return (

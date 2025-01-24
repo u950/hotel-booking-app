@@ -9,7 +9,7 @@ import Navbar from './components/Header/Navbar.jsx'
 const App = () => {
   return (
     <div>
-      <Navbar />
+      <Home/>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/hotel" element={<ExploreHotel />} />
