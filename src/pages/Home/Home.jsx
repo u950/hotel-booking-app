@@ -184,8 +184,8 @@ const Home = () => {
 
   return (
     <div>
-      <div style={{display: 'flex',}}>
-        <Navbar />
+      <div style={{display: 'flex', flexDirection: 'column'}}>
+        {/* <Navbar /> */}
         <HeroSection />
       </div>
       <br />
