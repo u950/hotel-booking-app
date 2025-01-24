@@ -235,10 +235,10 @@ const Home = () => {
           <div
             style={{
               backgroundColor: 'white',
-              width: '80%', // Decreased width for the pop-up card
-              maxWidth: '350px', // Set a maximum width
-              maxHeight: '80%', // Set a maximum height
-              padding: '20px',
+              width: '60%', // Decreased width for the pop-up card
+              maxWidth: '300px', // Set a maximum width
+              maxHeight: '70%', // Set a maximum height
+              padding: '10px',
               borderRadius: '10px', // Rounded corners
               boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)', // Enhanced shadow
               position: 'relative',
@@ -254,7 +254,7 @@ const Home = () => {
                 right: '10px', // Positioned on the right for the close button
                 backgroundColor: 'transparent',
                 border: 'none',
-                fontSize: '20px',
+                fontSize: '30px',
                 cursor: 'pointer',
                 color: '#007BFF', // Color for the close button
               }}
