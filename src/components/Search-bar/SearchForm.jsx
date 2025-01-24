@@ -59,7 +59,7 @@ const SearchForm = ({ children }) => {
       return;
     }
     // Navigate to Home with the current city as place
-    navigate(`/`, { state: { place } });
+    navigate(`/hotel-booking-app`, { state: { place } });
     window.scrollBy({
       top : 600, // distance to scroll
       left : 0,
