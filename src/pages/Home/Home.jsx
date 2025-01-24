@@ -192,7 +192,7 @@ const Home = () => {
     backgroundColor: 'white',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     borderRadius: '8px',
-    width: '10%', // Full width for mobile
+    width: '100%', // Full width for mobile
     maxWidth: '400px', // Max width for desktop
     margin: isMobileView ? '0 auto' : '0', // Center on mobile
   };
@@ -244,23 +244,24 @@ const Home = () => {
             }}
             onClick={(e) => e.stopPropagation()} // Prevent modal close on card click
           >
-            {/* Close Button for Mobile Filters */}
+            {/* Back Button */}
             <button
               style={{
                 position: 'absolute',
                 top: '10px',
-                right: '10px',
-                background: 'none',
+                left: '10px', // Positioned on the left for the back button
+                backgroundColor: 'transparent',
                 border: 'none',
                 fontSize: '20px',
                 cursor: 'pointer',
               }}
-              onClick={toggleFilter}
+              onClick={toggleFilter} // Close the filter modal
             >
-              &times; {/* Close icon */}
+              ← Back
             </button>
 
-            <h3 className="filters">Filters</h3>
+            {/* Title */}
+            <h3 className="filters" style={{ textAlign: 'center', marginTop: '20px' }}>Filters</h3>
 
             {/* Price Filter */}
             <h4 style={{ marginTop: '10px' }}>Price Range</h4>
