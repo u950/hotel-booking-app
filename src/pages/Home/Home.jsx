@@ -192,7 +192,7 @@ const Home = () => {
     backgroundColor: 'white',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     borderRadius: '8px',
-    width: '100%', // Full width for mobile
+    width: '10%', // Full width for mobile
     maxWidth: '400px', // Max width for desktop
     margin: isMobileView ? '0 auto' : '0', // Center on mobile
   };
