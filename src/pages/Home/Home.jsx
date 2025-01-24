@@ -177,8 +177,8 @@ const Home = () => {
 
   return (
     <div>
-      <Navbar />
-      <HeroSection />
+      <Navbar style={{ marginBottom: '0' }} />
+      <HeroSection style={{ margin: '0', padding: '0' }} />
 
       <br />
       <div style={grids}>
