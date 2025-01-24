@@ -16,7 +16,7 @@ const navStyles = css`
   align-items: center;
   padding: 10px 20px;
   background-color: white;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   transition: all 0.3s ease;
 
@@ -25,78 +25,88 @@ const navStyles = css`
   }
 `;
 
-const styles = {
-  navContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    width: '100%',
-    justifyContent: 'space-between',
-    maxWidth: '1200px',
-    margin: '0 auto',
-    padding: '0 10px',
-  },
-  navLinks: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '20px',
-    '@media (max-width: 768px)': {
-      display: 'none',
-    },
-  },
-  navItem: {
-    color: 'black',
-    textDecoration: 'none',
-    fontSize: '1rem',
-    fontWeight: '500',
-    transition: 'color 0.3s ease',
-    '&:hover': {
-      color: '#007bff',
-    },
-  },
-  logo: {
-    padding: '1px',
-    cursor: 'pointer',
-  },
-  menuIcon: {
-    display: 'none',
-    '@media (max-width: 768px)': {
-      display: 'block',
-      fontSize: '24px',
-      cursor: 'pointer',
-      color: 'black',
-    },
-  },
-  mobileMenu: {
-    // position: 'fixed',
-    top: '60px',
-    left: 0,
-    right: 0,
-    background: 'white',
-    padding: '20px',
-    boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-    display: 'none',
-    zIndex: 999,
-    '@media (max-width: 768px)': {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '15px',
-    },
-  },
-  signInButton: {
-    padding: '8px 20px',
-    borderRadius: '5px',
-    backgroundColor: '#007bff',
-    color: 'white',
-    textDecoration: 'none',
-    transition: 'background-color 0.3s ease',
-    '&:hover': {
-      backgroundColor: '#0056b3',
-    },
-    '@media (max-width: 768px)': {
-      display: 'none',
-    },
+const navContainer = css`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 10px;
+`;
+
+const navLinks = css`
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  @media (max-width: 768px) {
+    display: none;
   }
-};
+`;
+
+const navItem = css`
+  color: black;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #007bff;
+  }
+`;
+
+const logoStyles = css`
+  padding: 1px;
+  cursor: pointer;
+`;
+
+const menuIcon = css`
+  display: none;
+
+  @media (max-width: 768px) {
+    display: block;
+    font-size: 24px;
+    cursor: pointer;
+    color: black;
+  }
+`;
+
+const mobileMenu = css`
+  position: fixed;
+  top: 60px;
+  left: 0;
+  right: 0;
+  background: white;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  z-index: 999;
+
+  @media (min-width: 769px) {
+    display: none;
+  }
+`;
+
+const signInButton = css`
+  padding: 8px 20px;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -108,17 +118,30 @@ const Navbar = () => {
   return (
     <>
       <nav css={navStyles}>
-        <div style={styles.navContainer}>
-          <div style={styles.logo}>
+        <div css={navContainer}>
+          <div css={logoStyles}>
             <Logo />
           </div>
-          <div style={styles.navLinks}>
-            <Link to="/" style={styles.navItem} component={Home}>Home</Link>
-            <Link to="/hotel" style={styles.navItem}>Hotel</Link>
-            <Link to="/places" style={styles.navItem}>Places</Link>
+          <div css={navLinks}>
+            <Link to="/" css={navItem} component={Home}>
+              Home
+            </Link>
+            <Link to="/hotel" css={navItem}>
+              Hotel
+            </Link>
+            <Link to="/" css={navItem}>
+              Places
+            </Link>
           </div>
-          <Link to="/SignIn" css={css(styles.signInButton)}>Sign In</Link>
-          <div style={styles.menuIcon} onClick={toggleMenu}>
+          <Link to="/" css={signInButton}>
+            Sign In
+          </Link>
+          <div
+            css={menuIcon}
+            onClick={toggleMenu}
+            role="button"
+            aria-label="Toggle navigation menu"
+          >
             {isMenuOpen ? '✕' : '☰'}
           </div>
         </div>
@@ -126,15 +149,23 @@ const Navbar = () => {
 
       {/* Mobile menu */}
       {isMenuOpen && (
-        <div css={css(styles.mobileMenu)}>
-          <Link to="/" style={styles.navItem} onClick={toggleMenu}>Home</Link>
-          <Link to="/hotel" style={styles.navItem} onClick={toggleMenu}>Hotel</Link>
-          <Link to="/places" style={styles.navItem} onClick={toggleMenu}>Places</Link>
-          <Link to="/SignIn" style={styles.navItem} onClick={toggleMenu}>Sign In</Link>
+        <div css={mobileMenu}>
+          <Link to="/" css={navItem} onClick={toggleMenu}>
+            Home
+          </Link>
+          <Link to="/hotel" css={navItem} onClick={toggleMenu}>
+            Hotel
+          </Link>
+          <Link to="/" css={navItem} onClick={toggleMenu}>
+            Places
+          </Link>
+          <Link to="/" css={navItem} onClick={toggleMenu}>
+            Sign In
+          </Link>
         </div>
       )}
       {/* Add padding to body to prevent content from hiding under fixed navbar */}
-      <div style={{ paddingTop: '60px' }} />
+      <div css={css`padding-top: 60px;`} />
     </>
   );
 };

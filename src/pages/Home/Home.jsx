@@ -104,6 +104,7 @@ const Home = () => {
     '@media (max-width: 768px)': {
       flexDirection: 'column',
       alignItems: 'center',
+      padding: '10px',
     },
   };
   const gridStyle = { 
@@ -111,6 +112,10 @@ const Home = () => {
     gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', 
     gap: '20px',
     padding: '20px',
+    '@media (max-width: 768px)': {
+      gridTemplateColumns: '1fr',
+      padding: '10px',
+    },
   }
   const ExploreStyle = {
     display: 'grid',
@@ -136,8 +141,10 @@ const Home = () => {
     '@media (min-width: 769px)': {
       width: '25%',
       marginLeft: '10px',
-      marginTop: '30px',
-      
+    },
+    '@media (max-width: 768px)': {
+      width: '100%',
+      marginTop: '10px',
     },
   };
 
@@ -177,9 +184,10 @@ const Home = () => {
 
   return (
     <div>
-      <Navbar style={{ marginBottom: '0' }} />
-      <HeroSection style={{ margin: '0', padding: '0' }} />
-
+      <div style={{display: 'flex',}}>
+        <Navbar />
+        <HeroSection />
+      </div>
       <br />
       <div style={grids}>
         <div>
