@@ -4,7 +4,7 @@ import { fetchHotelList } from '../../services/apiFetch';
 import HotelCard from '../../components/Hotel-Card/HotelCard';
 import { useLocation } from 'react-router-dom';
 import { priceRanges,cityValues, ratingValues } from './FilterValues';
-import Navbar from '../../components/Header/Navbar';
+import '../../components/Button/Button.css'
 
 const Home = () => {
   // useStates for 3 filtering categories
@@ -134,7 +134,7 @@ const Home = () => {
   };
 
   const filterStyle = {
-    display: isFilterOpen ? 'flex' : 'none',
+    display: isFilterOpen || window.innerWidth > 768 ? 'flex' : 'none',
     flexDirection: 'column',
     position: 'relative',
     top: '80px',
@@ -204,9 +204,11 @@ const Home = () => {
         <HeroSection />
       </div>
       <br />
-      <button style={filterButtonStyle} onClick={toggleFilter}>
-        {isFilterOpen ? 'Hide Filters' : 'Show Filters'}
-      </button>
+      {!window.innerWidth > 768 && <div >
+        <button style={filterButtonStyle} onClick={toggleFilter}>
+          {isFilterOpen ? 'Hide Filters' : 'Show Filters'}
+        </button>
+      </div>}
       <div style={grids}>
         <div style={filterStyle}>
           <h3 className="filters">Filters</h3>
