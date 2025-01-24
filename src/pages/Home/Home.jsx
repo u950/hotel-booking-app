@@ -25,6 +25,8 @@ const Home = () => {
   
 
   const [searchTerm, setSearchTerm] = useState(place);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+
 
 
   useEffect(() => {
@@ -126,34 +128,40 @@ const Home = () => {
     alignItems: 'center',
     marginRight: '10%',
     gap: '20px',
+    '@media (max-width: 768px)': {
+      width: '100%',
+    },
   };
 
   const filterStyle = {
-    display: 'flex',
+    display: isFilterOpen ? 'flex' : 'none',
     flexDirection: 'column',
     position: 'relative',
     top: '80px',
-    width: '100%',
+    width: '10%',
     height: 'fit-content',
-    textAlign: 'center',
+    textAlign: 'left',
     marginLeft: '0',
     padding: '15px',
     backgroundColor: 'white',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    '@media (min-width: 769px)': {
-      width: '25%',
-      marginLeft: '10px',
-    },
     '@media (max-width: 768px)': {
-      width: '100%',
-      marginTop: '10px',
-      padding: '10px',
-      boxShadow: 'none',
+      position: 'absolute',
+      top: '60px',
+      left: '0',
+      right: '0',
+      zIndex: '1000',
     },
   };
 
-
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const filterButtonStyle = {
+    display: 'none',
+    '@media (max-width: 768px)': {
+      display: 'block',
+      margin: '10px',
+      padding: '10px',
+    },
+  };
 
   const handlePriceRangeChange = (event) => {
     const { value } = event.target;
@@ -185,6 +193,10 @@ const Home = () => {
     })
   };
 
+  const toggleFilter = () => {
+    setIsFilterOpen(!isFilterOpen);
+  };
+
   return (
     <div>
       <div style={{display: 'flex', flexDirection: 'column'}}>
@@ -192,9 +204,12 @@ const Home = () => {
         <HeroSection />
       </div>
       <br />
+      <button style={filterButtonStyle} onClick={toggleFilter}>
+        {isFilterOpen ? 'Hide Filters' : 'Show Filters'}
+      </button>
       <div style={grids}>
-        <div>
-          <h3  className='filters'>Filters</h3>
+        <div style={filterStyle}>
+          <h3 className="filters">Filters</h3>
 
           {/* price filter */}
           <h4 style={{marginTop: '10px'}}>Price Range</h4>
@@ -247,8 +262,7 @@ const Home = () => {
 
         {/* search term for filtering  */}
         <div style={ExploreStyle} >
-          <h1>Explore Hotels </h1> 
-
+          <h1>Explore Hotels</h1>
           {loading ? (
             <p>Loading hotels...</p>
           ) : error ? (
@@ -280,7 +294,7 @@ const Home = () => {
           </div>
 
           <div>
-            <label style={{display:'flex', alignItems: 'center'}}>
+            <label style={{display:'flex', alignItems: 'center', padding:'20px'}}>
               Page Size:
               <select value={pageSize} onChange={(e) => setPageSize(Number(e.target.value))}>
                 <option value={12}>12</option>
@@ -291,6 +305,7 @@ const Home = () => {
           </div>
         </div>
       </div>
+
     </div>
   );
 };
