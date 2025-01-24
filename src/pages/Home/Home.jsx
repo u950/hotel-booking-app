@@ -235,36 +235,39 @@ const Home = () => {
           <div
             style={{
               backgroundColor: 'white',
-              width: '90%',
-              maxWidth: '400px',
+              width: '80%', // Decreased width for the pop-up card
+              maxWidth: '350px', // Set a maximum width
+              maxHeight: '80%', // Set a maximum height
               padding: '20px',
-              borderRadius: '10px',
-              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+              borderRadius: '10px', // Rounded corners
+              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)', // Enhanced shadow
               position: 'relative',
+              overflowY: 'auto', // Make it scrollable
             }}
             onClick={(e) => e.stopPropagation()} // Prevent modal close on card click
           >
-            {/* Back Button */}
+            {/* Close Button */}
             <button
               style={{
                 position: 'absolute',
                 top: '10px',
-                left: '10px', // Positioned on the left for the back button
+                right: '10px', // Positioned on the right for the close button
                 backgroundColor: 'transparent',
                 border: 'none',
                 fontSize: '20px',
                 cursor: 'pointer',
+                color: '#007BFF', // Color for the close button
               }}
               onClick={toggleFilter} // Close the filter modal
             >
-              ← Back
+              &times; {/* Close icon */}
             </button>
 
             {/* Title */}
-            <h3 className="filters" style={{ textAlign: 'center', marginTop: '20px' }}>Filters</h3>
+            <h3 className="filters" style={{ textAlign: 'center', marginTop: '20px', color: '#333' }}>Filters</h3>
 
             {/* Price Filter */}
-            <h4 style={{ marginTop: '10px' }}>Price Range</h4>
+            <h4 style={{ marginTop: '10px', color: '#555' }}>Price Range</h4>
             {priceRanges.map((key, i) => (
               <label style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }} key={i}>
                 <input
@@ -278,7 +281,7 @@ const Home = () => {
             ))}
 
             {/* City Filter */}
-            <h4>City</h4>
+            <h4 style={{ color: '#555' }}>City</h4>
             {cityValues.map((key, idx) => (
               <label style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }} key={idx}>
                 <input
