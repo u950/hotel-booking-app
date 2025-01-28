@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import './Button.css'
 import { useNavigate } from 'react-router-dom'
-import BookingModal from '../Booking-Modal/BookingModal'
 
 
 const Button = ({buttonName, id,parentId, img, bookingId , bookingDetails, onClick}) => {

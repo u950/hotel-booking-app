@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { css } from '@emotion/react';
 import { Link, useLocation } from 'react-router-dom';
 import Logo from '../../assets/images/logo';
@@ -169,7 +169,7 @@ const Navbar = () => {
               {link.label}
             </Link>
           ))}
-          <Link to="/" css={navItem} onClick={toggleMenu}>
+          <Link to="/hotel-booking-app" css={navItem} onClick={toggleMenu}>
             Sign In
           </Link>
         </div>

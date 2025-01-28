@@ -3,9 +3,8 @@ import './SearchForm.css';
 import { fetchHotels } from '../../services/apiFetch';
 import { useNavigate } from 'react-router-dom';
 
-export const PeopleCount = createContext();
 
-const SearchForm = ({ children }) => {
+const SearchForm = () => {
 
  // for sharing to booking page
 
@@ -31,7 +30,7 @@ const SearchForm = ({ children }) => {
     try {
       const data = await fetchHotels();
       const filtered = data.filter((item) =>
-        item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||  // filter utility 
         item.city.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setSuggestions(filtered);
@@ -75,7 +74,6 @@ const SearchForm = ({ children }) => {
   };
 
   return (
-    <PeopleCount.Provider value={{ guest }}>
       <div className="form-container">
         <form onSubmit={handleOnSubmit} className="search-form">
           {/* Location input field */}
@@ -87,9 +85,9 @@ const SearchForm = ({ children }) => {
               onChange={(e) => {
                 setPlace(e.target.value); // Show suggestions on input change
               }}
-              onFocus={() => setShowSuggestions(true)} // Show suggestions on focus
+              onFocus={() => setShowSuggestions(true)} // Show suggestions on focus // main bug spotted here long 1 sec for suggetion blur
               onBlur={() => setTimeout(() => setShowSuggestions(false), 1000)} // Delay to prevent blur from hiding suggestions too quickly
-            />
+            />                                                              
             {showSuggestions && suggestions.length > 0 && (
               <ul className='suggestions-dropdown'>
                 {suggestions.map((suggestion) => (
@@ -151,7 +149,6 @@ const SearchForm = ({ children }) => {
           {clickSearchButton && <p style={{color: 'blue'}}>searching...</p>}
         </form>
       </div>
-    </PeopleCount.Provider>
   );
 };
 

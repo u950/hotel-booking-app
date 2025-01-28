@@ -18,7 +18,7 @@ const Home = () => {
   const [hotels, setHotels] = useState([]);
   const [filteredHotels, setFilteredHotels] = useState([]);
   const [pages, setPages] = useState(1);
-  const [pageSize, setPageSize] = useState(36);
+  const [pageSize, setPageSize] = useState(24);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -29,19 +29,20 @@ const Home = () => {
   const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 768);
 
 
-
+// as soon as selected city changes fetch data
   useEffect(() => {
     // setSearchTerm(selectedCity);
     // // setPageSize(36);
     fetchHotelData();
   },[selectedCity])
 
+  // fetching data from api using function async , await function
   const fetchHotelData = async () => {
     setLoading(true);
     try {
       const data = await fetchHotelList(pages, pageSize);
       setHotels(data.hotels);
-      // console.log(data.hotels);
+      // store fetched data to this state
     } catch (e) {
       console.log('Error fetching hotels:', e);
       setError('Failed to load hotels. Please try again later.');
@@ -78,9 +79,10 @@ const Home = () => {
       return cityMatch && (ratingMatch || priceMatch);
     });
 
-    setFilteredHotels(filtered);
+    setFilteredHotels(filtered);  // filtered data is stored in the state
   };
 
+  // update city, as soon as the  place comes from search function(search-bar.jsx)
   useEffect(()=>{
     if(place){
       setSelectedCity(place);
@@ -88,14 +90,18 @@ const Home = () => {
     }
   },[place])
 
+  // fetch hotel as page number changes
   useEffect(() => {
     fetchHotelData();
   }, [pages, pageSize]);
 
+  // as soon as the user filters 'filter hotels' function called
   useEffect(() => {
     filterHotels();
   }, [hotels, selectedPriceRanges, selectedCity, selectedRating]);
 
+
+  // responsiveness as soon as the component mounts
   useEffect(() => {
     // Event listener to detect screen width changes
     const handleResize = () => {
@@ -148,8 +154,10 @@ const Home = () => {
     display: isMobileView ? 'block' : 'none',
     margin: '10px',
     padding: '10px',
+
   };
 
+  // event is the default prop i.e event handlers
   const handlePriceRangeChange = (event) => {
     const { value } = event.target;
     setSelectedPriceRanges([value]); // Set the selected range to the clicked one
@@ -160,6 +168,7 @@ const Home = () => {
   const handleCityChange = (event) => {
     const { value } = event.target;
     setSelectedCity(value); // Set the selected city directly
+    // scroll up for user expereince 
     window.scrollBy({
       top: -230,
       left:0,
@@ -206,16 +215,18 @@ const Home = () => {
         <HeroSection />
       </div>
       <br />
-        <div >
-        <button
-          className="button-style"
-          style={filterButtonStyle}
-          onClick={toggleFilter}
-          disabled={!isMobileView}
-        >
-          {isFilterOpen ? 'Hide Filters' : 'Show Filters'}
-        </button>
-      </div>
+        {isMobileView && 
+        <div style={{paddingTop: '250px',paddingLeft: '10px'}}>
+          <button
+            className="button-style"
+            style={filterButtonStyle}
+            onClick={toggleFilter}
+            disabled={!isMobileView}
+          >
+            {isFilterOpen ? 'Hide Filters' : 'Show Filters'}
+          </button>
+        </div>
+      }
 
       {/* Mobile Filter Pop-up */}
       {isMobileView && isFilterOpen && (
