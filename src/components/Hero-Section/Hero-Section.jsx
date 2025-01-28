@@ -1,9 +1,18 @@
-import React from 'react'
+import React, { useEffect ,useState} from 'react'
 import hero from '../../assets/images/hero.jpg'
 import SearchForm from '../Search-bar/SearchForm'
 
 
 const HeroSection = () => {
+
+    // const [mobileView, setMobileView] = useState(window.innerWidth <= 768);
+    // useEffect(()=>{
+    //     const handleSize = () => {
+    //         setMobileView(window.innerWidth <= 768)
+    //     }
+    //     window.addEventListener('resize', handleSize);
+    //     return ()=> window.removeEventListener('resize', handleSize)
+    // },[])
 
     const herostyles = {
         width: '97%',
@@ -82,13 +91,10 @@ const HeroSection = () => {
         <div style={overlaystyles}></div>
         
         <div style={contentWrapper}>
-            <p style={textstyles}>Find the Perfect deal, always.</p>
+            <p style={textstyles}>Find the Perfect deal, always.</p> 
             <p style={para}>Book Hotels at your dream destination with BOOK MY HOTEL<br/>
-            Stay once, carry memories forever
-            Start here.. New Living
-            See life from a different perspective
-            your next space <br/>
-            The perfect place for getaways! </p>
+                Stay once, carry memories forever
+                Start here.. </p>
         </div>
         
         <div style={searchContaier}>
